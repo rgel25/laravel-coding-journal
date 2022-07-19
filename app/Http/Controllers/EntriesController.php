@@ -64,7 +64,8 @@ class EntriesController extends Controller
      */
     public function edit($id)
     {
-       return view('edit');
+        $entry = Entry::find($id);
+       return view('edit')->with('entry', $entry);
     }
 
     /**
@@ -76,7 +77,15 @@ class EntriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+         $updatedata = $request->validate([
+            'task' => 'required | max:255',
+            'taskDate' => 'required | max:255',
+            'isDone' => 'required'
+        ]);
+
+        Entry::whereId($id)->update($updatedata);
+        return redirect('/entries')->with('success', 'Task has been updated');
     }
 
     /**

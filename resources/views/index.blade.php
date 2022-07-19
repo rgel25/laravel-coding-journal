@@ -83,22 +83,37 @@
                             <ul class="list-group list-group-flush">
                                 @if(count($entries)>1) @foreach($entries as
                                 $entry) 
-                                @if($entry->isDone === 1)
-                                <li class="list-group-item text-decoration-line-through">
-                                 @else
                                 <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-6">
+                                @if($entry->isDone === 1)
+                                <p class="d-inline text-decoration-line-through">
+                                 @else
+                                 <p class="d-inline">
                                 @endif
                                     {{$entry->task}}
-                                    {{$entry->taskDate}}
-                                    {{$entry->isDone}}
-                                    
-                                    <a href="/entries/{{$entry->id}}/edit" class="btn btn-success btn-sm ms-3"><i class="bi bi-pencil"></i></a>
-                                    <form action="{{ route('entries.destroy', $entry->id) }}" method="post" class="d-inline">
+                                    </p>
+                                </div>
+                                <div class="col-4">
+                                <p class="d-inline text-end">
+                                        {{$entry->taskDate}}
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                <a href="/entries/{{$entry->id}}/edit" class="btn btn-success btn-sm ms-3"><i class="bi bi-pencil"></i></a>
+                             
+                               
+                                <form action="{{ route('entries.destroy', $entry->id) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="type" value="thought">
                                 <button type="submit" class="btn btn-danger btn-sm ms-3"><i class="bi bi-trash3-fill"></i></button>
                             </form>
+                                </div>
+                                   
+                                   
+                                  
+                            </div>
                                 </li>
                                 @endforeach
                             </ul>

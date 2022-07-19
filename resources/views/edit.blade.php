@@ -11,7 +11,10 @@
             integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
             crossorigin="anonymous"
         />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+        />
     </head>
     <body>
         <div class="container p-5">
@@ -26,11 +29,14 @@
                         />
 
                         <div class="card-body">
-                            <h5 class="card-title text-center">
-                                Edit task
-                            </h5>
-                            <form class="needs-validation" novalidate method="POST" action="{{ route('entries.store') }}">
-                                @csrf
+                            <h5 class="card-title text-center">Edit task</h5>
+                            <form
+                                class="needs-validation"
+                                novalidate
+                                method="POST"
+                                action="{{Route('entries.update', $entry->id)}}"
+                            >
+                                @csrf   @method('PATCH')
                                 <div class="form-group mb-3">
                                     <label for="task"
                                         >Add a new entry or task</label
@@ -43,6 +49,7 @@
                                         autofocus
                                         name="task"
                                         required
+                                        value="{{$entry->task}}"
                                     />
                                 </div>
                                 <div class="form-group mb-3">
@@ -56,12 +63,24 @@
                                         placeholder="date"
                                         required
                                         name="taskDate"
+                                        value="{{$entry->taskDate}}"
                                     />
-                                    <input
-                                        type="hidden"
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="">Status</label>
+                                    <select
+                                        class="form-select"
+                                        aria-label="Default select example"
                                         name="isDone"
-                                        value="0"
-                                    />
+                                    >
+                                        @if($entry->isDone === 1)
+                                        <option value="1" selected>Done</option>
+                                        <option value="0">Not Done</option>
+                                        @else
+                                        <option value="0" selected>Not Done</option>
+                                        <option value="1">Done</option>
+                                        @endif
+                                    </select>
                                 </div>
                                 <div class="d-grid">
                                     <button
@@ -72,34 +91,6 @@
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Entries</h5>
-                            <ul class="list-group list-group-flush">
-                                @if(count($entries)>1) @foreach($entries as
-                                $entry) 
-                                @if($entry->isDone === 1)
-                                <li class="list-group-item text-decoration-line-through">
-                                 @else
-                                <li class="list-group-item">
-                                @endif
-                                    {{$entry->task}}
-                                    {{$entry->taskDate}}
-                                    {{$entry->isDone}}
-                                    
-                                    <a href="/entries/{{$entry->id}}/edit" class="btn btn-success btn-sm ms-3"><i class="bi bi-pencil"></i></a>
-                                    <form action="{{ route('entries.destroy', $entry->id) }}" method="post" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="type" value="thought">
-                                <button type="submit" class="btn btn-danger btn-sm ms-3"><i class="bi bi-trash3-fill"></i></button>
-                            </form>
-                                </li>
-                                @endforeach
-                            </ul>
-                            @else
-                            <p class="card-text">No Entries Yet...</p>
-                            @endif
                         </div>
                     </div>
                 </div>
